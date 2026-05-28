@@ -7,7 +7,8 @@ class Settings(BaseModel):
     app_name: str = "SevaCare Rural API"
     env: str = os.getenv("ENV", "development")
     database_url: str = os.getenv(
-        "DATABASE_URL", "sqlite:///./sevacare.db"
+        "DATABASE_URL", 
+        "sqlite:////tmp/sevacare.db" if os.getenv("VERCEL") else "sqlite:///./sevacare.db"
     )
     redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
     otp_ttl_seconds: int = int(os.getenv("OTP_TTL_SECONDS", "300"))
