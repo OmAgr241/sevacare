@@ -1,6 +1,6 @@
 import { Clinic, ClinicDetail, WaitPrediction } from "@/types";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL && process.env.NEXT_PUBLIC_API_BASE_URL !== "" ? process.env.NEXT_PUBLIC_API_BASE_URL : "http://localhost:8000";
 
 export async function sendOtp(phone_number: string) {
   const res = await fetch(`${baseUrl}/auth/send-otp`, {

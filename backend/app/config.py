@@ -15,7 +15,7 @@ class Settings(BaseModel):
     twilio_from_number: str | None = os.getenv("TWILIO_FROM_NUMBER")
     sms_provider: str = os.getenv("SMS_PROVIDER", "mock")
     cors_origins: list[str] = os.getenv(
-        "CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000"
+        "CORS_ORIGINS", "*"
     ).split(",")
 
 
