@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.sqlite
+*.sqlite3
+backend/sevacare.db
+backend/.venv/
+.env
+.env.*
+!.env.example
+!frontend/.env.example
+!backend/.env.example
