@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import inspect, text
 
 from .config import get_settings
 from .database import Base, engine, SessionLocal
@@ -18,9 +19,26 @@ app.add_middleware(
 )
 
 
+def ensure_clinic_columns():
+    columns = {column["name"] for column in inspect(engine).get_columns("clinics")}
+    additions = []
+    if "doctor_name" not in columns:
+        additions.append(
+            "ALTER TABLE clinics ADD COLUMN doctor_name VARCHAR(120) NOT NULL DEFAULT 'Doctor unavailable'"
+        )
+    if "consultation_fee" not in columns:
+        additions.append("ALTER TABLE clinics ADD COLUMN consultation_fee INTEGER NOT NULL DEFAULT 0")
+
+    if additions:
+        with engine.begin() as connection:
+            for statement in additions:
+                connection.execute(text(statement))
+
+
 @app.on_event("startup")
 def on_startup():
     Base.metadata.create_all(bind=engine)
+    ensure_clinic_columns()
     with SessionLocal() as db:
         seed_data(db)
 

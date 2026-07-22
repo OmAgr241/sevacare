@@ -23,6 +23,8 @@ class ClinicResponse(BaseModel):
     id: int
     name: str
     specialty: str
+    doctor_name: str
+    consultation_fee: int
     latitude: float
     longitude: float
     distance_km: float
@@ -34,6 +36,8 @@ class ClinicDetailResponse(BaseModel):
     id: int
     name: str
     specialty: str
+    doctor_name: str
+    consultation_fee: int
     latitude: float
     longitude: float
     avg_wait_time: int

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { fetchNearbyClinics } from "@/lib/api";
 import { t } from "@/lib/translations";
 import { useSevaStore } from "@/store/useSevaStore";
@@ -79,8 +80,11 @@ export default function HomePage() {
 
   // Filter logic: match search query and category tab
   const filtered = clinics.filter((clinic) => {
-    const matchesSearch = clinic.name.toLowerCase().includes(query.toLowerCase()) || 
-                          clinic.specialty.toLowerCase().includes(query.toLowerCase());
+    const normalizedQuery = query.toLowerCase();
+    const matchesSearch =
+      clinic.name.toLowerCase().includes(normalizedQuery) ||
+      clinic.specialty.toLowerCase().includes(normalizedQuery) ||
+      clinic.doctor_name.toLowerCase().includes(normalizedQuery);
     const matchesCategory = selectedCategory === "all" || clinic.specialty === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -103,9 +107,12 @@ export default function HomePage() {
             </p>
           </div>
           <div className="hidden md:block w-48 shrink-0 relative z-10 -my-4 ml-4">
-            <img 
-              src="/hero_illustration.png" 
+            <Image
+              src="/hero_illustration.png"
               alt="Healthcare illustration" 
+              width={192}
+              height={144}
+              priority
               className="w-full h-auto drop-shadow-2xl rounded-2xl"
             />
           </div>

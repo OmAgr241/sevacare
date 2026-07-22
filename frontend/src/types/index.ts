@@ -4,6 +4,8 @@ export type Clinic = {
   id: number;
   name: string;
   specialty: string;
+  doctor_name: string;
+  consultation_fee: number;
   latitude: number;
   longitude: number;
   distance_km: number;
@@ -15,6 +17,8 @@ export type ClinicDetail = {
   id: number;
   name: string;
   specialty: string;
+  doctor_name: string;
+  consultation_fee: number;
   latitude: number;
   longitude: number;
   avg_wait_time: number;

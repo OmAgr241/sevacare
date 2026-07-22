@@ -26,6 +26,8 @@ class Clinic(Base):
     latitude: Mapped[float] = mapped_column(Float)
     longitude: Mapped[float] = mapped_column(Float)
     specialty: Mapped[str] = mapped_column(String(80))
+    doctor_name: Mapped[str] = mapped_column(String(120), default="Doctor unavailable")
+    consultation_fee: Mapped[int] = mapped_column(Integer, default=0)
     avg_wait_time: Mapped[int] = mapped_column(Integer, default=20)
     is_available: Mapped[bool] = mapped_column(default=True)
 
@@ -57,4 +59,3 @@ class QueueData(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     clinic: Mapped[Clinic] = relationship(back_populates="queue_data")
-

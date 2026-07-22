@@ -13,6 +13,8 @@ CREATE TABLE clinics (
   latitude DOUBLE PRECISION NOT NULL,
   longitude DOUBLE PRECISION NOT NULL,
   specialty VARCHAR(80) NOT NULL,
+  doctor_name VARCHAR(120) NOT NULL,
+  consultation_fee INTEGER NOT NULL DEFAULT 0,
   avg_wait_time INTEGER NOT NULL DEFAULT 20,
   is_available BOOLEAN NOT NULL DEFAULT TRUE
 );

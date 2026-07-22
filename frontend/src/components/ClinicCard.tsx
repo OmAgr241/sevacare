@@ -51,6 +51,8 @@ export default function ClinicCard({ clinic, lang }: { clinic: Clinic; lang: Lan
           </div>
 
           <p className="text-xs font-semibold text-slate-500 mt-0.5">{clinic.specialty}</p>
+          <p className="mt-1 text-xs font-medium text-slate-600">{clinic.doctor_name}</p>
+          <p className="mt-1 text-xs font-bold text-teal-700">Consultation fee: Rs. {clinic.consultation_fee}</p>
 
           <div className="mt-3.5 flex flex-wrap gap-2 text-xs font-bold">
             <span className="inline-flex items-center gap-1 rounded-xl bg-blue-50/70 border border-blue-100/50 px-3 py-1 text-blue-700">

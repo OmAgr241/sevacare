@@ -1,17 +1,16 @@
-from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from .models import Clinic, QueueData
 
 
 CLINICS = [
-    {"name": "PHC Kolar", "latitude": 13.1362, "longitude": 78.1290, "specialty": "General Medicine", "avg_wait_time": 15},
-    {"name": "Seva Women's Clinic", "latitude": 13.1207, "longitude": 78.1678, "specialty": "Gynecology", "avg_wait_time": 25},
-    {"name": "Grama Child Care", "latitude": 13.1123, "longitude": 78.1506, "specialty": "Pediatrics", "avg_wait_time": 20},
-    {"name": "Sri Krishna Eye Care", "latitude": 13.1415, "longitude": 78.1325, "specialty": "Eye Care", "avg_wait_time": 10},
-    {"name": "Rural Dental Center", "latitude": 13.1510, "longitude": 78.1210, "specialty": "Dental Care", "avg_wait_time": 18},
-    {"name": "Sanjeevani Wellness Center", "latitude": 13.1250, "longitude": 78.1180, "specialty": "General Medicine", "avg_wait_time": 30},
-    {"name": "Ayush Alternative Medicine", "latitude": 13.1090, "longitude": 78.1410, "specialty": "General Medicine", "avg_wait_time": 12},
+    {"id": 1, "name": "PHC Kolar", "latitude": 13.1362, "longitude": 78.1290, "specialty": "General Medicine", "doctor_name": "Dr. Ananya Rao", "consultation_fee": 120, "avg_wait_time": 15},
+    {"id": 2, "name": "Seva Women's Clinic", "latitude": 13.1207, "longitude": 78.1678, "specialty": "Gynecology", "doctor_name": "Dr. Kavya Menon", "consultation_fee": 250, "avg_wait_time": 25},
+    {"id": 3, "name": "Grama Child Care", "latitude": 13.1123, "longitude": 78.1506, "specialty": "Pediatrics", "doctor_name": "Dr. Arjun Iyer", "consultation_fee": 180, "avg_wait_time": 20},
+    {"id": 4, "name": "Sri Krishna Eye Care", "latitude": 13.1415, "longitude": 78.1325, "specialty": "Eye Care", "doctor_name": "Dr. Nitin Shankar", "consultation_fee": 220, "avg_wait_time": 10},
+    {"id": 5, "name": "Rural Dental Center", "latitude": 13.1510, "longitude": 78.1210, "specialty": "Dental Care", "doctor_name": "Dr. Rakesh Bhat", "consultation_fee": 200, "avg_wait_time": 18},
+    {"id": 6, "name": "Sanjeevani Wellness Center", "latitude": 13.1250, "longitude": 78.1180, "specialty": "General Medicine", "doctor_name": "Dr. Meera Kulkarni", "consultation_fee": 150, "avg_wait_time": 30},
+    {"id": 7, "name": "Ayush Alternative Medicine", "latitude": 13.1090, "longitude": 78.1410, "specialty": "General Medicine", "doctor_name": "Dr. Suresh Naidu", "consultation_fee": 100, "avg_wait_time": 12},
 ]
 
 QUEUE = [
@@ -26,18 +25,20 @@ QUEUE = [
 
 
 def seed_data(db: Session) -> None:
-    existing = db.execute(select(Clinic.id)).first()
-    if existing:
-        # If database already has clinics, clear them first to allow reseeding the new dataset
-        db.execute(select(Clinic)).close() # Close any open result sets
-        db.query(QueueData).delete()
-        db.query(Clinic).delete()
-        db.commit()
-
     for row in CLINICS:
-        db.add(Clinic(**row))
+        clinic = db.get(Clinic, row["id"])
+        if clinic:
+            for field, value in row.items():
+                setattr(clinic, field, value)
+        else:
+            db.add(Clinic(**row))
     db.commit()
 
     for row in QUEUE:
-        db.add(QueueData(**row))
+        queue = db.get(QueueData, row["clinic_id"])
+        if queue:
+            queue.active_patients = row["active_patients"]
+            queue.avg_consultation_time = row["avg_consultation_time"]
+        else:
+            db.add(QueueData(**row))
     db.commit()
