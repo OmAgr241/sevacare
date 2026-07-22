@@ -19,6 +19,13 @@ class AuthResponse(BaseModel):
     dev_otp: str | None = None
 
 
+class DoctorResponse(BaseModel):
+    id: int
+    name: str
+    consultation_fee: int
+    is_available: bool
+
+
 class ClinicResponse(BaseModel):
     id: int
     name: str
@@ -30,6 +37,8 @@ class ClinicResponse(BaseModel):
     distance_km: float
     wait_time_mins: int
     is_available: bool
+    available_doctor_count: int
+    doctors: list[DoctorResponse]
 
 
 class ClinicDetailResponse(BaseModel):
@@ -44,11 +53,14 @@ class ClinicDetailResponse(BaseModel):
     active_patients: int
     avg_consultation_time: int
     is_available: bool
+    available_doctor_count: int
+    doctors: list[DoctorResponse]
 
 
 class BookAppointmentRequest(BaseModel):
     user_id: int
     clinic_id: int
+    doctor_id: int
     appointment_time: datetime
     client_request_id: str | None = None
 
@@ -64,6 +76,7 @@ class AppointmentStatusResponse(BaseModel):
     booking_status: str
     appointment_time: datetime
     clinic_name: str
+    doctor_name: str | None = None
 
 
 class WaitTimeResponse(BaseModel):

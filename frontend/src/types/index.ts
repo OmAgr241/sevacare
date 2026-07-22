@@ -1,5 +1,12 @@
 export type LanguageCode = "en" | "hi" | "kn" | "ta" | "te" | "bn" | "mr";
 
+export type Doctor = {
+  id: number;
+  name: string;
+  consultation_fee: number;
+  is_available: boolean;
+};
+
 export type Clinic = {
   id: number;
   name: string;
@@ -11,6 +18,8 @@ export type Clinic = {
   distance_km: number;
   wait_time_mins: number;
   is_available: boolean;
+  available_doctor_count: number;
+  doctors: Doctor[];
 };
 
 export type ClinicDetail = {
@@ -25,6 +34,8 @@ export type ClinicDetail = {
   active_patients: number;
   avg_consultation_time: number;
   is_available: boolean;
+  available_doctor_count: number;
+  doctors: Doctor[];
 };
 
 export type WaitPrediction = {
@@ -38,6 +49,7 @@ export type PendingBooking = {
   id: string;
   user_id: number;
   clinic_id: number;
+  doctor_id: number;
   appointment_time: string;
   created_at: string;
 };

@@ -32,7 +32,21 @@ class Clinic(Base):
     is_available: Mapped[bool] = mapped_column(default=True)
 
     queue_data: Mapped["QueueData"] = relationship(back_populates="clinic", uselist=False)
+    doctors: Mapped[list["Doctor"]] = relationship(back_populates="clinic", cascade="all, delete-orphan")
     appointments: Mapped[list["Appointment"]] = relationship(back_populates="clinic")
+
+
+class Doctor(Base):
+    __tablename__ = "doctors"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    clinic_id: Mapped[int] = mapped_column(ForeignKey("clinics.id"), index=True)
+    name: Mapped[str] = mapped_column(String(120))
+    consultation_fee: Mapped[int] = mapped_column(Integer, default=0)
+    is_available: Mapped[bool] = mapped_column(default=True)
+
+    clinic: Mapped[Clinic] = relationship(back_populates="doctors")
+    appointments: Mapped[list["Appointment"]] = relationship(back_populates="doctor")
 
 
 class Appointment(Base):
@@ -41,6 +55,7 @@ class Appointment(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
     clinic_id: Mapped[int] = mapped_column(ForeignKey("clinics.id"), index=True)
+    doctor_id: Mapped[int | None] = mapped_column(ForeignKey("doctors.id"), index=True, nullable=True)
     appointment_time: Mapped[datetime] = mapped_column(DateTime, index=True)
     booking_status: Mapped[str] = mapped_column(String(32), default="confirmed")
     client_request_id: Mapped[str | None] = mapped_column(String(64), unique=True, nullable=True)
@@ -48,6 +63,7 @@ class Appointment(Base):
 
     user: Mapped["User"] = relationship(back_populates="appointments")
     clinic: Mapped["Clinic"] = relationship(back_populates="appointments")
+    doctor: Mapped[Doctor | None] = relationship(back_populates="appointments")
 
 
 class QueueData(Base):

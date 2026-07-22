@@ -34,6 +34,11 @@ def ensure_clinic_columns():
             for statement in additions:
                 connection.execute(text(statement))
 
+    appointment_columns = {column["name"] for column in inspect(engine).get_columns("appointments")}
+    if "doctor_id" not in appointment_columns:
+        with engine.begin() as connection:
+            connection.execute(text("ALTER TABLE appointments ADD COLUMN doctor_id INTEGER"))
+
 
 @app.on_event("startup")
 def on_startup():

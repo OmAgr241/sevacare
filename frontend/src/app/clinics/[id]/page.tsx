@@ -34,8 +34,19 @@ export default function ClinicDetailPage() {
           <article className="rounded-2xl border border-teal-100 bg-white p-4">
             <h1 className="text-2xl font-bold">{clinic.name}</h1>
             <p className="mt-1 text-slate-600">{clinic.specialty}</p>
-            <p className="mt-3 text-sm font-medium text-slate-700">{clinic.doctor_name}</p>
-            <p className="mt-1 text-sm font-bold text-teal-700">Consultation fee: Rs. {clinic.consultation_fee}</p>
+            <section className="mt-4">
+              <h2 className="text-sm font-bold text-slate-800">Doctors</h2>
+              <div className="mt-2 space-y-2">
+                {clinic.doctors.map((doctor) => (
+                  <div key={doctor.id} className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 text-sm">
+                    <span className="font-medium text-slate-700">{doctor.name}</span>
+                    <span className={doctor.is_available ? "font-bold text-teal-700" : "font-medium text-slate-400"}>
+                      {doctor.is_available ? `Rs. ${doctor.consultation_fee}` : "Unavailable"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
             <div className="mt-4 space-y-2 text-sm text-slate-700">
               <p>Average wait: {clinic.avg_wait_time} mins</p>
               <p>Active patients: {clinic.active_patients}</p>

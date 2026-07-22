@@ -38,10 +38,14 @@ export async function syncPendingBookings() {
 
   let synced = 0;
   for (const item of pending) {
+    if (!item.doctor_id) {
+      continue;
+    }
     try {
       await bookAppointment({
         user_id: item.user_id,
         clinic_id: item.clinic_id,
+        doctor_id: item.doctor_id,
         appointment_time: item.appointment_time,
         client_request_id: item.id,
       });

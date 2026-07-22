@@ -19,10 +19,19 @@ CREATE TABLE clinics (
   is_available BOOLEAN NOT NULL DEFAULT TRUE
 );
 
+CREATE TABLE doctors (
+  id SERIAL PRIMARY KEY,
+  clinic_id INTEGER NOT NULL REFERENCES clinics(id),
+  name VARCHAR(120) NOT NULL,
+  consultation_fee INTEGER NOT NULL DEFAULT 0,
+  is_available BOOLEAN NOT NULL DEFAULT TRUE
+);
+
 CREATE TABLE appointments (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id),
   clinic_id INTEGER NOT NULL REFERENCES clinics(id),
+  doctor_id INTEGER REFERENCES doctors(id),
   appointment_time TIMESTAMP NOT NULL,
   booking_status VARCHAR(32) NOT NULL DEFAULT 'confirmed',
   client_request_id VARCHAR(64) UNIQUE,

@@ -50,6 +50,7 @@ export async function fetchWaitPrediction(clinicId: number): Promise<WaitPredict
 export async function bookAppointment(payload: {
   user_id: number;
   clinic_id: number;
+  doctor_id: number;
   appointment_time: string;
   client_request_id?: string;
 }) {

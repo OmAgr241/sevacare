@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from .models import Clinic, QueueData
+from .models import Clinic, Doctor, QueueData
 
 
 CLINICS = [
@@ -23,6 +23,26 @@ QUEUE = [
     {"clinic_id": 7, "active_patients": 3, "avg_consultation_time": 9},
 ]
 
+DOCTORS = [
+    {"id": 1, "clinic_id": 1, "name": "Dr. Ananya Rao", "consultation_fee": 120, "is_available": True},
+    {"id": 2, "clinic_id": 1, "name": "Dr. Rohan Kumar", "consultation_fee": 100, "is_available": True},
+    {"id": 3, "clinic_id": 1, "name": "Dr. Priya Sharma", "consultation_fee": 130, "is_available": False},
+    {"id": 4, "clinic_id": 2, "name": "Dr. Kavya Menon", "consultation_fee": 250, "is_available": True},
+    {"id": 5, "clinic_id": 2, "name": "Dr. Asha Nair", "consultation_fee": 220, "is_available": False},
+    {"id": 6, "clinic_id": 3, "name": "Dr. Arjun Iyer", "consultation_fee": 180, "is_available": True},
+    {"id": 7, "clinic_id": 3, "name": "Dr. Neha Verma", "consultation_fee": 170, "is_available": True},
+    {"id": 8, "clinic_id": 3, "name": "Dr. Kiran Das", "consultation_fee": 160, "is_available": False},
+    {"id": 9, "clinic_id": 4, "name": "Dr. Nitin Shankar", "consultation_fee": 220, "is_available": True},
+    {"id": 10, "clinic_id": 5, "name": "Dr. Rakesh Bhat", "consultation_fee": 200, "is_available": True},
+    {"id": 11, "clinic_id": 5, "name": "Dr. Smitha Rao", "consultation_fee": 190, "is_available": True},
+    {"id": 12, "clinic_id": 6, "name": "Dr. Meera Kulkarni", "consultation_fee": 150, "is_available": True},
+    {"id": 13, "clinic_id": 6, "name": "Dr. Vikram Shah", "consultation_fee": 140, "is_available": True},
+    {"id": 14, "clinic_id": 6, "name": "Dr. Fatima Khan", "consultation_fee": 160, "is_available": False},
+    {"id": 15, "clinic_id": 6, "name": "Dr. Ravi Patil", "consultation_fee": 145, "is_available": True},
+    {"id": 16, "clinic_id": 7, "name": "Dr. Suresh Naidu", "consultation_fee": 100, "is_available": True},
+    {"id": 17, "clinic_id": 7, "name": "Dr. Lalitha Devi", "consultation_fee": 110, "is_available": False},
+]
+
 
 def seed_data(db: Session) -> None:
     for row in CLINICS:
@@ -41,4 +61,13 @@ def seed_data(db: Session) -> None:
             queue.avg_consultation_time = row["avg_consultation_time"]
         else:
             db.add(QueueData(**row))
+    db.commit()
+
+    for row in DOCTORS:
+        doctor = db.get(Doctor, row["id"])
+        if doctor:
+            for field, value in row.items():
+                setattr(doctor, field, value)
+        else:
+            db.add(Doctor(**row))
     db.commit()
